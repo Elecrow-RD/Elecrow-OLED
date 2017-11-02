@@ -19,6 +19,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 import time
+import os
 
 import Adafruit_GPIO.SPI as SPI
 import Adafruit_SSD1306
@@ -94,12 +95,15 @@ while True:
     MemUsage = subprocess.check_output(cmd, shell = True )
     cmd = "df -h | awk '$NF==\"/\"{printf \"Disk: %d/%dGB %s\", $3,$2,$5}'"
     Disk = subprocess.check_output(cmd, shell = True )
+    cmd = os.popen('vcgencmd measure_temp').readline()
+    Temp = cmd.replace("temp","Temp")
 
     # Write two lines of text.
-    draw.text((x, top),      str(CPU),   font=font, fill=255)
-    draw.text((x, top+16),   str(Disk),  font=font, fill=255)
-    draw.text((x, top+32),  "IP: " + str(IP),  font=font, fill=255)
-    draw.text((x, top+48),   str(MemUsage),    font=font, fill=255)
+    draw.text((x, top),   str(Temp),  font=font, fill=255)
+    draw.text((x, top+14),      str(CPU),   font=font, fill=255)
+    draw.text((x, top+28),   str(Disk),  font=font, fill=255)
+    draw.text((x, top+40),  "IP: " + str(IP),  font=font, fill=255)
+    draw.text((x, top+52),   str(MemUsage),    font=font, fill=255)
     # Display image.
     disp.image(image)
     disp.display()
